@@ -114,7 +114,8 @@ void ImageConverterPrivate::pagesLoaded(bool ok) {
 	// Calculate a good width for the image
 	int highWidth=settings.screenWidth;
 	loaderObject->page.setViewportSize(QSize(highWidth, 10));
-	if (settings.smartWidth && frame->scrollBarMaximum(Qt::Horizontal) > 0) {
+    QString html = loaderObject->page.mainFrame()->toHtml();
+    if (settings.smartWidth && frame->scrollBarMaximum(Qt::Horizontal) > 0) {
 		if (highWidth < 10) highWidth=10;
 		int lowWidth=highWidth;
 		while (frame->scrollBarMaximum(Qt::Horizontal) > 0 && highWidth < 32000) {
