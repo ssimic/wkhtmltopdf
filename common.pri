@@ -21,6 +21,13 @@ unix {
     include($$join(TEMP, "/"))
     include($$join(PRL, "/"))
 }
+mac-osx {
+    TEMP = $$[QT_INSTALL_LIBS] libQtGui.prl
+    PRL  = $$[QT_INSTALL_LIBS] QtGui.framework/QtGui.prl
+    include($$join(TEMP, "/"))
+    include($$join(PRL, "/"))
+
+}
 
 exists($$QMAKE_LIBDIR_QT/libQtGui.so) {
     DEFINES += QT_SHARED

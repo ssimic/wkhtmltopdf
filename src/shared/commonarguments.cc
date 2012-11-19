@@ -163,6 +163,7 @@ void CommandLineParserBase::addGlobalLoadArgs(LoadGlobal & s) {
 	qthack(false);
 
     addarg("cookie-jar", 0, "Read and write cookies from and to the supplied cookie jar file", new QStrSetter(s.cookieJar, "path") );
+    addarg("output-html", 0, "",new QStrSetter(s.cookieJar,"path") );
 }
 
 void CommandLineParserBase::addWebArgs(Web & s) {
