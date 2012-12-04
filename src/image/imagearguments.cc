@@ -43,7 +43,9 @@ ImageCommandLineParser::ImageCommandLineParser(wkhtmltopdf::settings::ImageGloba
 	addarg("crop-h",0,"Set height for cropping", new IntSetter(s.crop.height,"int"));
 	addarg("format",'f',"Output file format", new QStrSetter(s.fmt, "format") );
 	addarg("quality",0,"Output image quality (between 0 and 100)", new IntSetter(s.quality, "int") );
-
+        
+        addarg("output-html",0,"Output html file name", new QStrSetter(s.ophtml, "char") );
+        
 	extended(true);
 	qthack(true);
 	addarg("disable-smart-width", 0, "Use the specified width even if it is not large enough for the content", new ConstSetter<bool>(s.smartWidth, false));

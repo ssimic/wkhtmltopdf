@@ -75,6 +75,9 @@ struct DLL_PUBLIC ImageGlobal {
 	QString out;
 	//! The output format
 	QString fmt;
+        
+        //! The output html file name
+        QString ophtml;
 
 	//! Set the screen width
 	int screenWidth;

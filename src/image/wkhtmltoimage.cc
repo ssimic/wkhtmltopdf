@@ -29,11 +29,12 @@
 int main(int argc, char** argv) {
 	//This will store all our settings
 	wkhtmltopdf::settings::ImageGlobal settings;
+        
 	//Create a command line parser to parse commandline arguments
 	ImageCommandLineParser parser(settings);
+
 	//Parse the arguments
 	parser.parseArguments(argc, (const char**)argv);
-
 
 	bool use_graphics=true;
 #if defined(Q_WS_X11) || defined(Q_WS_MACX)
@@ -42,6 +43,7 @@ int main(int argc, char** argv) {
 	if (!use_graphics) QApplication::setGraphicsSystem("raster");
 #endif
 #endif
+
 	QApplication a(argc, argv, use_graphics);
 	MyLooksStyle * style = new MyLooksStyle();
 	a.setStyle(style);
@@ -49,11 +51,18 @@ int main(int argc, char** argv) {
 	//Create the actual page converter to convert the pages
 	wkhtmltopdf::ImageConverter converter(settings);
 	QObject::connect(&converter, SIGNAL(checkboxSvgChanged(const QString &)), style, SLOT(setCheckboxSvg(const QString &)));
-	QObject::connect(&converter, SIGNAL(checkboxCheckedSvgChanged(const QString &)), style, SLOT(setCheckboxCheckedSvg(const QString &)));
-	QObject::connect(&converter, SIGNAL(radiobuttonSvgChanged(const QString &)), style, SLOT(setRadioButtonSvg(const QString &)));
-	QObject::connect(&converter, SIGNAL(radiobuttonCheckedSvgChanged(const QString &)), style, SLOT(setRadioButtonCheckedSvg(const QString &)));
+        QObject::connect(&converter, SIGNAL(checkboxCheckedSvgChanged(const QString &)), style, SLOT(setCheckboxCheckedSvg(const QString &)));
+        QObject::connect(&converter, SIGNAL(radiobuttonSvgChanged(const QString &)), style, SLOT(setRadioButtonSvg(const QString &)));
+        QObject::connect(&converter, SIGNAL(radiobuttonCheckedSvgChanged(const QString &)), style, SLOT(setRadioButtonCheckedSvg(const QString &)));
 
+        
+        fprintf(stdout, "main 59.%d.\n\n",style);
+	QTextStream outputStream(stdout);
+        outputStream << style;
+        fprintf(stdout, "main 62\n\n");
+        
 	wkhtmltopdf::ProgressFeedback feedback(settings.quiet, converter);
+	
 	bool success = converter.convert();
 	return handleError(success, converter.httpErrorCode());
 }

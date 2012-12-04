@@ -94,39 +94,54 @@ void CommandLineParserBase::version(FILE * fd) const {
 void CommandLineParserBase::parseArg(int sections, const int argc, const char ** argv, bool & defaultMode, int & arg, char * page) {
 	if (argv[arg][1] == '-') { //We have a long style argument
 		//After an -- apperas in the argument list all that follows is interpreted as default arguments
-		if (argv[arg][2] == '0') {
+//		fprintf(stdout, "97  ..\n\n");
+                if (argv[arg][2] == '0') {
 			defaultMode=true;
 			return;
 		}
 		//Try to find a handler for this long switch
 		QHash<QString, ArgHandler*>::iterator j = longToHandler.find(argv[arg]+2);
+                
+//                fprintf(stdout, "104  ..\n\n");
+                
 		if (j == longToHandler.end()) { //Ups that argument did not exist
+                        fprintf(stdout, "j %s ..\n\n", j);
+                        fprintf(stdout, "longToHandler.end() %s ..\n\n", longToHandler.end());
+                
 			fprintf(stderr, "Unknown long argument %s\n\n", argv[arg]);
 			usage(stderr, false);
 			exit(1);
 		}
+//                fprintf(stdout, "114  ..\n\n");
 		if (!(j.value()->section & sections)) {
 			fprintf(stderr, "%s specified in incorrect location\n\n", argv[arg]);
 			usage(stderr, false);
 			exit(1);
 		}
+//                fprintf(stdout, "120  ..\n\n");
 		//Check to see if there is enough arguments to the switch
 		if (argc-arg < j.value()->argn.size()+1) {
 			fprintf(stderr, "Not enough arguments parsed to %s\n\n", argv[arg]);
 			usage(stderr, false);
 			exit(1);
 		}
+//                fprintf(stdout, "126  ..\n\n");
 		if (!(*(j.value()))(argv+arg+1, *this, page)) {
+                        fprintf(stdout, "129  ..\n\n");
 			fprintf(stderr, "Invalid argument(s) parsed to %s\n\n", argv[arg]);
 			usage(stderr, false);
 			exit(1);
 		}
+//                fprintf(stdout, "133  ..\n\n");
 #ifndef __EXTENSIVE_WKHTMLTOPDF_QT_HACK__
 		if (j.value()->qthack)
 			fprintf(stderr, "The switch %s, is not support using unpatched qt, and will be ignored.", argv[arg]);
 #endif
 		//Skip already handled switch arguments
+		
 		arg += j.value()->argn.size();
+                //fprintf(stdout, "j %s ..\n\n", j);
+                //fprintf(stdout, "longToHandler.end() %s ..\n\n", longToHandler.end());
 	} else {
 		int c=arg;//Remember the current argument we are parsing
 		for (int j=1; argv[c][j] != '\0'; ++j) {
@@ -159,6 +174,7 @@ void CommandLineParserBase::parseArg(int sections, const int argc, const char **
  				fprintf(stderr, "The switch -%c, is not support using unpatched qt, and will be ignored.", argv[c][j]);
 #endif
 			//Skip already handled switch arguments
+                        //fprintf(stdout, "@@@@@ %s\n\n", argv[arg]);
 			arg += k.value()->argn.size();
 		}
 	}

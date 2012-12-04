@@ -73,6 +73,7 @@ ImageGlobal::ImageGlobal():
 	in(""),
 	out(""),
 	fmt(""),
+        ophtml(""),
 	quality(94),
 	smartWidth(true) {}
 

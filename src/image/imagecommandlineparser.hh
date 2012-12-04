@@ -23,6 +23,7 @@
 #include "commandlineparserbase.hh"
 #include <cstdio>
 #include <wkhtmltox/imagesettings.hh>
+#include <string.h>
 
 /*! \brief The class is responsible for parsing command line information
 */

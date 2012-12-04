@@ -55,8 +55,6 @@ struct DLL_PUBLIC LoadGlobal {
 	LoadGlobal();
 	//! Path of the cookie jar file
 	QString cookieJar;
-    //! Path of the output html file
-    QString outputHtml;
 };
 
 struct DLL_PUBLIC LoadPage {

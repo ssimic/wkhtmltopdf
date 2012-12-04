@@ -29,6 +29,7 @@
 #include <QBuffer>
 #include <QDebug>
 #include <QEventLoop>
+#include <QFile>
 #include <QFileInfo>
 #include <QImage>
 #include <QObject>
@@ -115,7 +116,21 @@ void ImageConverterPrivate::pagesLoaded(bool ok) {
 	int highWidth=settings.screenWidth;
 	loaderObject->page.setViewportSize(QSize(highWidth, 10));
     QString html = frame->toHtml();
-    fprintf(stdout,html);
+    
+    
+    // ********** output-html **********
+    //QTextStream outputStream(stdout);
+    //outputStream << html;
+    //outputStream << settings.ophtml;
+//    if(settings.ophtml != ""){
+//        QFile file(settings.ophtml);
+//        if(file.open(QIODevice::WriteOnly)){
+//            QTextStream outfile(&file);
+//            outfile << html;
+//            file.close();
+//        }
+//    }
+    
     if (settings.smartWidth && frame->scrollBarMaximum(Qt::Horizontal) > 0) {
 		if (highWidth < 10) highWidth=10;
 		int lowWidth=highWidth;
@@ -190,7 +205,7 @@ void ImageConverterPrivate::pagesLoaded(bool ok) {
 	if (settings.transparent && (settings.fmt == "png" || settings.fmt == "svg")) {
 		QWebElement e = frame->findFirstElement("body");
 		e.setStyleProperty("background-color", "transparent");
-		e.setStyleProperty("background-image", "none");
+		e.setStyleProperty("background-image", "nonecd");
 		QPalette pal = loaderObject->page.palette();
 		pal.setColor(QPalette::Base, QColor(Qt::transparent));
 		loaderObject->page.setPalette(pal);
@@ -200,6 +215,15 @@ void ImageConverterPrivate::pagesLoaded(bool ok) {
 	painter.translate(-rect.left(), -rect.top());
 	frame->render(&painter);
 	painter.end();
+        
+        if(settings.ophtml != ""){
+            QFile file(settings.ophtml);
+            if(file.open(QIODevice::WriteOnly)){
+                QTextStream outfile(&file);
+                outfile << frame->toHtml();
+                file.close();
+            }
+        }
 
 	//loadProgress(30);
 	// perform filter(s)

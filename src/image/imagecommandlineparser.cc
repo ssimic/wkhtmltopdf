@@ -111,18 +111,31 @@ void ImageCommandLineParser::readme(FILE * fd, bool html) const {
  */
 void ImageCommandLineParser::parseArguments(int argc, const char ** argv, bool final) {
 	settings.in="";
-    settings.out="";
-	bool defaultMode=false;
-	for (int i=1; i < argc; ++i) {
-        if (i==argc-2 && (argv[i][0] != '-' || argv[i][1] == '\0')) { // the arg before last (in)
-            settings.in = QString::fromUtf8(argv[i]);
-        } else if (i==argc-1 && (argv[i][0] != '-' || argv[i][1] == '\0')) { // the last arg (out)
-            settings.out = QString::fromUtf8(argv[i]);
-		} else {
-			parseArg(global, argc, argv, defaultMode, i, 0);
-		}
-	}
+        settings.out="";
 
+        settings.ophtml = "";
+	bool defaultMode=false;
+
+	for (int i=1; i < argc; ++i) {
+            if (i==argc-2 && (argv[i][0] != '-' || argv[i][1] == '\0')) { // the arg before last (in)
+                settings.in = QString::fromUtf8(argv[i]);
+            } 
+            else if (i==argc-1 && (argv[i][0] != '-' || argv[i][1] == '\0')) { // the last arg (out)
+                settings.out = QString::fromUtf8(argv[i]);
+
+                // コンパイルがちゃんと通ってるかの確認↓の１文で出力名が変更されるよ！ 2012/11/26 shimizu
+                // settings.out = "1126-" + settings.out;
+
+            }
+            else if(!strcmp(argv[i], "--output-html")){
+                settings.ophtml = QString::fromUtf8(argv[i+1]);
+                i++;
+            }
+            else {
+                    parseArg(global, argc, argv, defaultMode, i, 0);
+            }
+	}
+        
 	if (final || settings.in=="" || settings.out=="") {
         fprintf(stderr, "You need to specify at least one input file, and exactly one output file\nUse - for stdin or stdout\n\n");
         usage(stderr, false);
